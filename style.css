@@ -175,6 +175,8 @@ body {
 }
 
 .glass p {
+    font-style: italic;
+    text-align: justify;
     line-height: 1.9;
     margin-bottom: 15px;
 }
