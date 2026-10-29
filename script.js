@@ -88,6 +88,7 @@ function showToast(message) {
 ===================================== */
 
 const balloonContainer = document.getElementById("balloonContainer");
+
 const balloonMessages = [
     "❤️ You make every day brighter",
     "🌸 You deserve endless happiness",
@@ -100,24 +101,83 @@ const balloonMessages = [
     "🎁 You deserve all the happiness",
     "💌 You are deeply appreciated",
     "🌈 May all your dreams come true",
-    "❤️ Forever grateful for you"
+    "❤️ Forever grateful for you",
+    "🥳 Today is all about celebrating you",
+    "🎉 Wishing you laughter and joy today",
+    "💫 You light up every room you enter",
+    "🌷 Your kindness makes the world better",
+    "💝 You are a gift to everyone around you",
+    "🌟 Never stop being wonderful",
+    "🍰 May your life be as sweet as birthday cake",
+    "🎊 Sending endless smiles your way",
+    "💕 You deserve the very best in life",
+    "🌺 May happiness follow you everywhere",
+    "✨ Keep chasing your dreams fearlessly",
+    "💗 Your smile is truly magical",
+    "🌸 You make life more beautiful",
+    "🎂 Another year, another reason to celebrate",
+    "💖 Happiness looks wonderful on you",
+    "🌈 May your future be colorful and bright",
+    "🎁 Every moment with you is precious",
+    "🌹 May your heart always stay happy",
+    "💫 Wishing you success in everything you do",
+    "🌟 You're stronger than you know",
+    "🍫 Here's an extra sweet birthday wish",
+    "🎊 May all your wishes come true today",
+    "💌 Thank you for being you",
+    "❤️ You are loved more than you realize",
+    "🌙 May your nights be peaceful and calm",
+    "🌞 May your mornings start with joy",
+    "🌻 Keep blooming beautifully every day",
+    "✨ Your presence makes life brighter",
+    "🎉 Celebrate every little happiness",
+    "💝 You deserve endless love and care",
+    "🌸 May this year bring wonderful surprises",
+    "🎂 Let's make today unforgettable",
+    "🥰 Stay happy, healthy and blessed",
+    "💕 Your happiness means a lot",
+    "🌟 You inspire people around you",
+    "🌹 Wishing you beautiful memories ahead",
+    "💫 The world is better with you in it",
+    "🎁 May good things always find you",
+    "🍰 Enjoy every magical moment today",
+    "🌈 Sending positivity and love",
+    "💖 Keep smiling and shining",
+    "🎊 Cheers to another amazing year",
+    "❤️ You are someone's favorite person",
+    "🌷 May love surround you forever",
+    "✨ Every day is better because of you",
+    "🥳 Wishing you endless adventures",
+    "💝 Your heart is truly special",
+    "🌟 Never forget how amazing you are",
+    "🌺 You deserve every happiness",
+    "🎂 May this birthday be your best one yet",
+    "🍫 Sweet wishes for a sweet soul",
+    "💌 Here's a hug wrapped in words"
 ];
 
+/* Shuffle messages */
+const shuffledMessages = [...balloonMessages].sort(
+    () => Math.random() - 0.5
+);
+
+/* Create 8 balloons with unique messages */
 for (let i = 0; i < 8; i++) {
+
     const balloon = document.createElement("div");
     balloon.className = "balloon";
     balloon.innerHTML = "🎈";
+
     balloon.addEventListener("click", () => {
-        if (balloon.innerHTML === "💥") return;
+
+        if (balloon.dataset.popped) return;
+
+        balloon.dataset.popped = "true";
         balloon.innerHTML = "💥";
-        const msg =
-            balloonMessages[
-            Math.floor(
-                Math.random() * balloonMessages.length
-            )
-            ];
-        showPopup(msg);
+
+        showPopup(shuffledMessages[i]);
     });
+
     balloonContainer.appendChild(balloon);
 }
 
@@ -351,3 +411,70 @@ function createPaperConfetti() {
         }, 10000);
     }
 }
+
+/* ===========================
+   BIRTHDAY COUNTDOWN
+=========================== */
+
+const countdownScreen = document.getElementById("countdownScreen");
+const birthdayPage = document.getElementById("birthdayPage");
+
+// Birthday Date (November 15)
+const targetDate = new Date("November 15, 2026 00:00:00").getTime();
+
+function updateCountdown() {
+
+    const now = new Date().getTime();
+    const difference = targetDate - now;
+
+    if (difference <= 0) {
+
+        countdownScreen.style.display = "none";
+        birthdayPage.style.display = "block";
+
+        clearInterval(countdownInterval);
+
+        // Optional Celebration
+        setTimeout(() => {
+            showPopup("🎂 Happy Birthday! The surprise has been unlocked ❤️");
+        }, 1000);
+
+        return;
+    }
+
+    const days = Math.floor(
+        difference / (1000 * 60 * 60 * 24)
+    );
+
+    const hours = Math.floor(
+        (difference % (1000 * 60 * 60 * 24)) /
+        (1000 * 60 * 60)
+    );
+
+    const minutes = Math.floor(
+        (difference % (1000 * 60 * 60)) /
+        (1000 * 60)
+    );
+
+    const seconds = Math.floor(
+        (difference % (1000 * 60)) /
+        1000
+    );
+
+    document.getElementById("days").textContent =
+        String(days).padStart(2, "0");
+
+    document.getElementById("hours").textContent =
+        String(hours).padStart(2, "0");
+
+    document.getElementById("minutes").textContent =
+        String(minutes).padStart(2, "0");
+
+    document.getElementById("seconds").textContent =
+        String(seconds).padStart(2, "0");
+}
+
+updateCountdown();
+
+const countdownInterval =
+    setInterval(updateCountdown, 1000);
