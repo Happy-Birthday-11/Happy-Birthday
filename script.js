@@ -413,34 +413,54 @@ function createPaperConfetti() {
 }
 
 /* ===========================
-   BIRTHDAY COUNTDOWN
+   BIRTHDAY COUNTDOWN + EXPIRY
 =========================== */
 
 const countdownScreen = document.getElementById("countdownScreen");
 const birthdayPage = document.getElementById("birthdayPage");
 
-// Birthday Date (November 15)
-const targetDate = new Date("November 15, 2026 00:00:00").getTime();
+// Opens on Nov 15
+const unlockDate = new Date("November 15, 2026 00:00:00").getTime();
+
+// Expires on Nov 17
+const expiryDate = new Date("November 17, 2026 00:00:00").getTime();
 
 function updateCountdown() {
 
     const now = new Date().getTime();
-    const difference = targetDate - now;
 
-    if (difference <= 0) {
+    // AFTER NOVEMBER 17
+    if (now >= expiryDate) {
+
+        countdownScreen.innerHTML = `
+            <div class="countdown-box">
+                <h1>🎂 Birthday Surprise Ended</h1>
+                <p style="margin-top:20px;font-size:20px;">
+                    ❤️ This special birthday page was available only on
+                    November 15 and November 16.
+                </p>
+
+                <p style="margin-top:20px;">
+                    Thank you for visiting ✨
+                </p>
+            </div>
+        `;
+
+        birthdayPage.style.display = "none";
+        return;
+    }
+
+    // BETWEEN NOV 15 AND NOV 16
+    if (now >= unlockDate && now < expiryDate) {
 
         countdownScreen.style.display = "none";
         birthdayPage.style.display = "block";
 
-        clearInterval(countdownInterval);
-
-        // Optional Celebration
-        setTimeout(() => {
-            showPopup("🎂 Happy Birthday! The surprise has been unlocked ❤️");
-        }, 1000);
-
         return;
     }
+
+    // BEFORE NOV 15
+    const difference = unlockDate - now;
 
     const days = Math.floor(
         difference / (1000 * 60 * 60 * 24)
@@ -475,6 +495,4 @@ function updateCountdown() {
 }
 
 updateCountdown();
-
-const countdownInterval =
-    setInterval(updateCountdown, 1000);
+setInterval(updateCountdown, 1000);
